@@ -15,26 +15,39 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 @Entity
-@Table(name = "users", indexes = {@Index(name = "UK_USERS_EMAIL", columnList = "email", unique = true)})
+@Table(name = "jpausers", indexes = {@Index(name = "UK_USERS_EMAIL", columnList = "email", unique = true)})
 @DynamicUpdate
 @DynamicInsert
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = -563329217866858622L;
+	
+	@Builder
+	public User(String type, String name, String email, String sex, String birthDate,
+			String phoneNumber, String password) {
+		this.type = type;
+		this.name = name;
+		this.email = email;
+		this.sex = sex;
+		this.birthDate = birthDate;
+		this.phoneNumber = phoneNumber;
+		this.password = password;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +55,7 @@ public class User implements Serializable {
 	private Long id;
 
 	@ColumnDefault(value = "1")
-	@Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
+	@Column(nullable = false, length = 10, columnDefinition = "CHAR(1)")
 	private String type;
 
 
@@ -53,10 +66,10 @@ public class User implements Serializable {
 	private String name;
 
 	@ColumnDefault(value = "1")
-	@Column(nullable = false, length = 1, columnDefinition = "CHAR(1)")
+	@Column(nullable = false, length = 10, columnDefinition = "CHAR(1)")
 	private String sex;
 
-	@Column(nullable = false, length = 6)
+	@Column(nullable = false, length = 20)
 	private String birthDate;
 
 	@Column(nullable = false, length = 20)
